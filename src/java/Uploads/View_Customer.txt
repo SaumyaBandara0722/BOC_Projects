@@ -1,0 +1,131 @@
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+
+
+<link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+<link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+
+<%
+    String driver = "com.mysql.jdbc.Driver";
+    String connectionUrl = "jdbc:mysql://localhost:3307/";
+    String database = "insurance_database";
+    String userid = "root";
+    String password = "root";
+    String id = request.getParameter("id");
+    try {
+        Class.forName(driver);
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet resultSet = null;
+%>
+<!DOCTYPE html>
+
+<head>
+    <title>Customer Details</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+    <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+<nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="#">CEYBANK INSURANCE</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+                <a class="nav-link" href="index_1.html">Home <span class="sr-only">(current)</span></a>
+            </li>
+
+            <li class="nav-item active">
+                <a class="nav-link" href="View_Customer.jsp">View All Customers <span class="sr-only">(current)</span></a>
+            </li>
+
+
+            <li class="nav-item">
+                <a class="nav-link" href="index.html">Customer Details</a>
+            </li>
+
+
+        </ul>
+
+        <form class="form-inline my-2 my-lg-0" method="post" action="search.jsp">
+            <input type="text" name="id" class="form-control mr-sm-2" placeholder="PF No or Lastname">
+            <button type="submit" name="save" class="btn btn-primary">Search</button>
+            <span class="navbar-toggler-icon"></span>
+        </form>
+
+    </div>
+</nav>
+
+<body>
+    </br>
+    <h3> <span class="badge badge-secondary">All Customer List </span></h3>
+
+    <table class="table table-striped">
+        <thead>
+
+        <th>PF_no</th>
+        <th>NIC</th>
+        <th>Gender</th>
+        <th>Initials</th>
+        <th>Lastname</th>
+        <th>Address1</th>
+        <th>Address2</th>
+        <th>City</th>
+        <th>Mobile</th>
+        <th>Email</th>
+        <th>Type</th>
+    </thead>
+
+
+
+
+
+    <%
+        try {
+            connection = DriverManager.getConnection(connectionUrl + database, userid, password);
+            statement = connection.createStatement();
+            String sql = "select * from insurance_database.customer";
+            resultSet = statement.executeQuery(sql);
+            while (resultSet.next()) {
+    %>
+    <tr>
+        <td><%=resultSet.getString("id")%></td>
+        <td><%=resultSet.getString("NIC")%></td>
+        <td><%=resultSet.getString("Gender")%></td>
+        <td><%=resultSet.getString("Initials")%></td>
+        <td><%=resultSet.getString("Lastname")%></td>
+        <td><%=resultSet.getString("Address_1")%></td>
+        <td><%=resultSet.getString("Address_2")%></td>
+        <td><%=resultSet.getString("City")%></td>
+        <td><%=resultSet.getString("Mobile_no")%></td>
+        <td><%=resultSet.getString("Email")%></td>
+        <td><%=resultSet.getString("Additional")%></td>
+
+
+
+    </tr>
+    <%
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    %>
+</table>
+</body>
+
+<nav class="navbar fixed-bottom navbar-light bg-dark">
+    <a class="navbar-brand" href="#"></a>
+</nav>
+
+</html>

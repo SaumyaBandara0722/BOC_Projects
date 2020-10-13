@@ -1,0 +1,16 @@
+{
+    "elements": {
+        "a": {
+            "attributes": {
+                "data-toggle": {},
+                "aria-expanded": {},
+                "href": {}
+            }
+        }
+    },
+    "attributes": {
+        "overflow": {
+            "context": "ul"
+        }
+    }
+}

@@ -1,0 +1,286 @@
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core"%>
+
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.Connection"%>
+<%
+    String driver = "com.mysql.jdbc.Driver";
+    String connectionUrl = "jdbc:mysql://localhost:3307/";
+    String database = "insurance_database";
+    String userid = "root";
+    String password = "root";
+    String id = request.getParameter("id");
+
+    try {
+        Class.forName(driver);
+    } catch (ClassNotFoundException e) {
+        e.printStackTrace();
+    }
+    Connection connection = null;
+    Statement statement = null;
+    ResultSet resultSet = null;
+%>
+<%
+    try {
+        connection = DriverManager.getConnection(connectionUrl + database, userid, password);
+        statement = connection.createStatement();
+        String sql = "select * from insurance_database.customer where id='" + id + "' ";
+        resultSet = statement.executeQuery(sql);
+        while (resultSet.next()) {
+%>
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Customer</title>
+        <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css"/>
+        <link href="css/bootstrap.css" rel="stylesheet" type="text/css"/>
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+
+    <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #e3f2fd;">
+        <a class="navbar-brand" href="#">CEYBANK INSURANCE</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index_1.html">Home <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="View_Customer.jsp">View All Customers <span class="sr-only">(current)</span></a>
+                </li>
+
+                <li class="nav-item active">
+                    <a class="nav-link" href="Insurance.html">Insurance Details <span class="sr-only">(current)</span></a>
+                </li>
+
+
+
+            </ul>
+
+            <form class="form-inline my-2 my-lg-0" method="post" action="search.jsp">
+                <input type="text" name="id" class="form-control mr-sm-2" placeholder="PF No or Lastname">
+                <button type="submit" name="save" class="btn btn-primary">Search</button>
+                <span class="navbar-toggler-icon"></span>
+            </form>
+
+
+        </div>
+    </nav>
+
+
+
+
+
+    <div class="container">
+
+
+        </br>
+
+        </br>
+        <h3> <span class="badge badge-secondary">Update Customer </span></h3>
+
+        <div class="p-3 mb-2 bg-light text-dark">
+
+            <form action="UpdateEmpServlet2" method="post" >  
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="id">01)PF_no</label>
+                            <input type="text" class="form-control" placeholder="PF_no*" name="id" value="<%=resultSet.getString("id")%>" readonly>
+                        </div>
+                    </div>
+                    <!--  col-md-6   -->
+
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="NIC">02)NIC</label>
+                            <input type="text" class="form-control" placeholder="NIC*" name="NIC" value="<%=resultSet.getString("NIC")%>">
+                        </div>
+                    </div>
+                    <!--  col-md-6   -->
+                </div>
+
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="company">03)Initials</label>
+                            <input type="text" class="form-control" placeholder="" name="Initials" value="<%=resultSet.getString("Initials")%>">
+                        </div>
+
+
+                    </div>
+                    <!--  col-md-6   -->
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="phone">04)Lastname</label>
+                            <input type="text" class="form-control" name="Lastname" placeholder="" value="<%=resultSet.getString("Lastname")%>">
+                        </div>
+                    </div>
+                    <!--  col-md-6   -->
+                </div>
+                <!--  row   -->
+
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="Address_1">05)Address_1</label>
+                            <input type="text" class="form-control" name="Address_1" placeholder="" value="<%=resultSet.getString("Address_1")%>">
+                        </div>
+                    </div>
+                    <!--  col-md-6   -->
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="Address_2">06)Address_2</label>
+                            <input type="text" class="form-control" name="Address_2" placeholder="" value="<%=resultSet.getString("Address_2")%>">
+                        </div>
+
+                    </div>
+                    <!--  col-md-6   -->
+                </div>
+                <!--  row   -->
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="email">07)City</label>
+                            <input type="text" class="form-control" name="City" placeholder="" value="<%=resultSet.getString("City")%>">
+                        </div>
+                    </div>
+                    <!--  col-md-6   -->
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="Mobile_no">08)Mobile_no</label>
+                            <input type="text" class="form-control" name="Mobile_no" placeholder="" value="<%=resultSet.getString("Mobile_no")%>">
+                        </div>
+
+                    </div>
+                    <!--  col-md-6   -->
+                </div>
+                <!--  row   -->
+
+
+                <div class="row">
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="Email">09)Email</label>
+                            <input type="text" class="form-control" name="Email" placeholder="" value="<%=resultSet.getString("Email")%>">
+                        </div>
+                    </div>
+                    <!--  col-md-6   -->
+
+                    <div class="col-md-6">
+
+                        <div class="form-group">
+                            <label for="Additional">10)Customer type</label>
+
+
+                            <c:set var="additional" value="<%=resultSet.getString("Additional")%>" />
+
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="Additional" value="Staff" <c:if test="${additional=='Staff'}">checked</c:if>
+                                       <label class="form-check-label" for="exampleRadios1">
+                                        Staff
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="Additional" value="Pension" <c:if test="${additional=='Pension'}">checked</c:if>
+                                           <label class="form-check-label" for="exampleRadios2">
+                                        Pension
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="Additional" value="WOP" <c:if test="${additional=='WOP'}">checked</c:if>
+                                           <label class="form-check-label" for="exampleRadios2">
+                                        WOP
+                                    </label>
+                                </div>
+
+                            </div>
+
+                        </div>
+                        <!--  col-md-6   -->
+                    </div>
+                    <!--  row   -->
+
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+
+
+                                <label for="id">11)Gender</label>
+
+                            <c:set var="gender" value="<%=resultSet.getString("Gender")%>" />
+
+
+                            <div class="form-check">
+                                <input class="form-check-input" type="radio" name="Gender" value="Male" <c:if test="${gender=='MR' || gender=='Male'}">checked</c:if>
+                                       <label class="form-check-label" for="exampleRadios1">
+                                        Male
+                                    </label>
+                                </div>
+                                <div class="form-check">
+                                    <input class="form-check-input" type="radio" name="Gender" value="Female" <c:if test="${gender=='MRS' || gender=='Female'}">checked</c:if>
+                                           <label class="form-check-label" for="exampleRadios2">
+                                        Female
+                                    </label>
+                                </div>
+
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <button type="submit" value="Update" class="btn btn-primary">Update</button>
+
+                </form>
+            </div>
+
+            <br/>  
+
+
+
+
+
+            <nav class="navbar fixed-bottom navbar-light bg-dark">
+                <a class="navbar-brand" href="#"></a>
+            </nav>
+        </div>
+
+
+
+
+
+    <%
+            }
+            connection.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    %>
+</body>
+</html>
