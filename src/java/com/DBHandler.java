@@ -18,7 +18,8 @@ public class DBHandler {
         Connection con = null;
         try {
             Class.forName("com.mysql.jdbc.Driver");
-            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory", "root", "root");
+//            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory", "root", "root");
+              con = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory?useSSL=false", "root", "admin");
 
         } catch (Exception e) {
             System.out.println(e);
@@ -244,14 +245,24 @@ public class DBHandler {
         return status;
     }
  
+    
     //view loan schemes according to segment and purpose
     public static List<Scheme> readSchemes(String segment, String purpose){
        List<Scheme> list = new ArrayList<Scheme>();
-       
+    
         try{
-            Connection con = DBHandler.getConnection();
-            PreparedStatement ps = (PreparedStatement)con.prepareStatement(
-                    "select * from scheme_details where segment=? and purpose=?");
+//            Connection con = DBHandler.getConnection();
+//            PreparedStatement ps = (PreparedStatement)con.prepareStatement(
+//                    "select * from scheme_details where segment=? and purpose=?");
+   
+            Connection conn = null; // connection to the database
+            
+            // connects to the database
+            DriverManager.registerDriver(new com.mysql.jdbc.Driver());
+            conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory?useSSL=false", "root", "admin");
+            
+            PreparedStatement ps = (PreparedStatement)conn.prepareStatement(
+                      "select * from scheme where segment=? and purpose=?");
             ps.setString(1, segment);
             ps.setString(2, purpose);
             
@@ -261,13 +272,16 @@ public class DBHandler {
                 Scheme s = new Scheme();
                 s.setSid(rs.getInt("id"));
                 s.setSname(rs.getString("schemeName") );
-                s.setDesc(rs.getString("description"));
+//                s.setDesc(rs.getString("description"));
+                s.setDesc(rs.getString("desc"));
                 s.setSegment("segment");
                 s.setPurpose("purpose");
+                //s.setFile(rs.getBlob("file"));
                                 
                 list.add(s);
             }
-            con.close();
+//            con.close();
+              conn.close();
             
         } catch (Exception e) {
             System.err.println(e.getMessage());
@@ -275,25 +289,4 @@ public class DBHandler {
         return list;
     }
     
-    //add loan schemes
-    public static int AddScheme(Scheme e) {
-        int status = 0;
-        try {
-            Connection con = DBHandler.getConnection();
-            PreparedStatement ps = con.prepareStatement("insert into loan_advisory.scheme_details(id,schemeName,description,segment,purpose,path) values (?, ?, ?, ?, ?, ?)");
-
-            ps.setInt(1, 0);
-            ps.setString(2, e.getSname());
-            ps.setString(3, e.getDesc());
-            ps.setString(4, e.getSegment());
-            ps.setString(5, e.getPurpose());
-            ps.setString(6, e.getPath());
-            status = ps.executeUpdate();
-
-            con.close();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-        return status;
-    }
 }

@@ -35,12 +35,12 @@
             request.setAttribute("scheme", l);
         %>
 
-        <h1>Select Your Scheme</h1>
+        <h2 style="text-align:center">Select Your Scheme</h2>
         <br>
         <table class="table table-striped">
             <thead>
             <th>Scheme Id</th>
-            <th>Scheme Name</th>
+            <th>Scheme Name</th> 
             <th>Description</th>
             <th>Selection</th>
         </thead>           
@@ -51,7 +51,11 @@
                     <td>${u.getSid()}</td>
                     <td>${u.getSname()}</td>
                     <td>${u.getDesc()}</td>
-                    <td><input name="btnSelect" type="button" value ="View more" class="btn btn-secondary"></td>
+                    <td> <form action="SchemeSevlet2" method="get">
+                        <input type="hidden" name="hidIDSave" value="${u.getSid()}">                       
+                        <input type="submit" value ="View more" class="btn btn-secondary" style="background-color:#000000; border: none;"/>
+                    </form>
+                    </td>
                 </tr>
 
             </c:forEach>

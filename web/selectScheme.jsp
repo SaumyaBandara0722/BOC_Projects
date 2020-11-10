@@ -3,6 +3,10 @@
     Created on : Oct 6, 2020, 8:33:10 AM
     Author     : 977042160v
 --%>
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
 <%@page import="model.Scheme"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
@@ -19,8 +23,9 @@
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #E8E8FA;">
-            <a class="navbar-brand" href="#">Loan Advisory</a>
+        <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #FFE933;">
+            <img src="views/download.png" alt="" style="width:90px;height:70px;"/>
+            <a class="navbar-brand" href="#" style="white-space:pre">&#9Loan Advisory</a>     
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -49,18 +54,18 @@
                         <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Loan Scheme<span class="caret"></span></a>
                         <ul class="dropdown-menu">                        
                             <li class="dropdown-item"><a href="selectScheme.jsp">Select</a></li>
-                            <li class="dropdown-item"><a href="schemeManagement.jsp">Add</a></li>
+                            <li class="dropdown-item"><a href="schemeManagement.jsp">Add</a></li>                       
                         </ul>
                     </li>
                 </ul>
             </div>
         </nav>
 
-        <div class="container">
+        <div class="container" style="width: 50%; align-items: center">
             <div class="row">
-                <div class="col-8">
-                    <h5 class="m-3">Add required loan segment and purpose to get avaliable loan schemes</h5>
-
+                <div class="col-8"><br>
+                    <h5 style="text-align:center">Add required loan segment and purpose to get avaliable loan schemes</h5>
+                    <br>
                     <form action="schemeDetails.jsp" method="post">                                      
 
                         <!-- SEGMENT -->
@@ -68,7 +73,28 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="lblName">Segment: </span>
                             </div>
-                            <input type="text" id="txtSegment" name="txtSegment">
+                            <select class="form-control" name="txtSegment" id="txtSegment">
+                                <option value="-1">select segment</option>
+                                <%
+                                    Connection con = null;
+                                    try {
+                                        Class.forName("com.mysql.jdbc.Driver");
+                                        con = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory?useSSL=false", "root", "admin");
+                                        String query = "select * from segment where status='active'";
+                                        Statement stm = con.createStatement();
+                                        ResultSet rs = stm.executeQuery(query);
+
+                                        while (rs.next()) {
+                                %>
+                                <option value="<%=rs.getString("segName")%>" required=""><%=rs.getString("segName")%></option>
+                                <%
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                        out.println("Error" + ex.getMessage());
+                                    }
+                                %>
+                            </select>
                         </div>
 
                         <!-- PURPOSE -->
@@ -76,11 +102,32 @@
                             <div class="input-group-prepend">
                                 <span class="input-group-text" id="lblName">Purpose: </span>
                             </div>
-                            <input type="text" id="txtPurpose" name="txtPurpose">
+                            <!--                            <input type="text" id="txtPurpose" name="txtPurpose" required>-->
+                            <select class="form-control" name="txtPurpose">
+                                <option value="-1">select purpose</option>
+                                <%
+                                    Connection conn = null;
+                                    try {
+                                        Class.forName("com.mysql.jdbc.Driver");
+                                        conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory?useSSL=false", "root", "admin");
+                                        String query = "select * from purpose where purpose_status='active'";
+                                        Statement stm = con.createStatement();
+                                        ResultSet rs = stm.executeQuery(query);
+
+                                        while (rs.next()) {
+                                %>
+                                <option value="<%=rs.getString("purpose")%>" required=""><%=rs.getString("purpose")%></option>
+                                <%
+                                        }
+                                    } catch (Exception ex) {
+                                        ex.printStackTrace();
+                                        out.println("Error" + ex.getMessage());
+                                    }
+                                %>
+                            </select>
                         </div>
 
-                        <!--                    <input type="hidden" name="hidIDSegment" value="txtSegment">-->
-                        <input type="submit" name="btnSave" value="View Scheme Details" class="btn btn-primary">
+                        <input type="submit" name="btnSave" value="View Scheme Details" class="btn btn-primary" style="background-color:#000000; border: none;">
                     </form>
                 </div>
             </div>

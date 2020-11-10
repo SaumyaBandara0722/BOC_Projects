@@ -12,12 +12,13 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author 977042160v
  */
+
 public class AddCustomerServlet extends HttpServlet {
-    
+  
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-     
+        
     }
 
     @Override
@@ -43,11 +44,11 @@ public class AddCustomerServlet extends HttpServlet {
             c.setPurpose(purpose);
             c.setAmount(amount);
             c.setScheme(scheme);
-            
+                        
             int status=DBHandler.AddCustomer(c);
             if(status>0){
                 out.print("Record saved successfully!");
-                request.getRequestDispatcher("customer.jsp").include(request, response);
+                request.getRequestDispatcher("customer.jsp");
             }else{
                 out.println("Sorry! unable to save record");
             }

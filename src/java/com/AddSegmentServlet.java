@@ -38,7 +38,8 @@ public class AddSegmentServlet extends HttpServlet {
             int status = DBHandler.addSegment(s);
             if (status > 0) {
                 out.print("Record saved successfully!");
-                request.getRequestDispatcher("segment.jsp").include(request, response);
+//                request.getRequestDispatcher("segment.jsp").include(request, response);
+                  request.getRequestDispatcher("segment.jsp");
             } else {
                 out.println("Sorry! unable to save record");
             }

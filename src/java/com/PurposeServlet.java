@@ -32,7 +32,7 @@ public class PurposeServlet extends HttpServlet {
             int status = DBHandler.addPurpose(p);
             if (status > 0) {
                 out.print("Record saved successfully!");
-                request.getRequestDispatcher("purpose.jsp").include(request, response);
+                request.getRequestDispatcher("purpose.jsp");
             } else {
                 out.println("Sorry! unable to save record");
             }
@@ -124,7 +124,7 @@ public class PurposeServlet extends HttpServlet {
             int output = DBHandler.deletePurposeDetails(p);
             if (output > 0) {
                 out.print("Record deleted successfully!");
-                request.getRequestDispatcher("view_purpose.jsp").include(request, response);
+                request.getRequestDispatcher("view_purpose.jsp");
             } else {
                 out.println("Sorry! unable to delete record");
             }

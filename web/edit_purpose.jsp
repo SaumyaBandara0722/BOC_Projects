@@ -4,6 +4,10 @@
     Author     : 977042160v
 --%>
 
+<%@page import="java.sql.ResultSet"%>
+<%@page import="java.sql.Statement"%>
+<%@page import="java.sql.DriverManager"%>
+<%@page import="java.sql.Connection"%>
 <%@page import="model.Purpose"%>
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <!DOCTYPE html>
@@ -17,8 +21,9 @@
         <title>edit_purpose</title>
     </head>
     <body>
-        <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #E8E8FA;">
-            <a class="navbar-brand" href="#">Loan Advisory</a>
+        <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #FFE933;">
+            <img src="views/download.png" alt="" style="width:90px;height:70px;"/>
+            <a class="navbar-brand" href="#" style="white-space:pre">&#9Loan Advisory</a>     
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -44,12 +49,12 @@
                     </li>
 
                     <li class="dropdown">
-                    <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Loan Scheme<span class="caret"></span></a>
-                    <ul class="dropdown-menu">                        
-                        <li class="dropdown-item"><a href="selectScheme.jsp">Select</a></li>
-                        <li class="dropdown-item"><a href="schemeManagement.jsp">Add</a></li>
-                    </ul>
-                </li>
+                        <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Loan Scheme<span class="caret"></span></a>
+                        <ul class="dropdown-menu">                        
+                            <li class="dropdown-item"><a href="selectScheme.jsp">Select</a></li>
+                            <li class="dropdown-item"><a href="schemeManagement.jsp">Add</a></li>                       
+                        </ul>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -59,34 +64,62 @@
             p = (Purpose) request.getAttribute("sObject");
 
         %>
-        <h1>Edit Details</h1>
-        <form id="formPurpose" action="PurposeServlet" method="get">
-            <!-- SEGMENT ID -->
-            <div class="input-group input-group-sm mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="lblID">Purpose ID: </span>                           
-                </div>                       
-                <input type="text" id="txtID" name="txtID" value="<%=p.getPid()%>">                                         
-            </div>
+        <div class="container" style="width: 50%; align-items: center">
+            <div class="row">
+                <div class="col-8">
+                    <h2 class="m-3">Edit Details</h2>
+                    <form id="formPurpose" action="PurposeServlet" method="get">
+                        <!-- SEGMENT ID -->
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="lblID">Purpose ID: </span>                           
+                            </div>                       
+                            <input type="text" id="txtID" name="txtID" value="<%=p.getPid()%>" required="">                                         
+                        </div>
 
-            <!-- SEGMENT NAME -->
-            <div class="input-group input-group-sm mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="lblName">Segment Name: </span>                           
-                </div>                       
-                <input type="text" id="txtName" name="txtName" value="<%=p.getSname()%>">                                         
-            </div>
+                        <!-- SEGMENT NAME -->
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="lblName">Segment Name: </span>                           
+                            </div>                       
+<!--                            <input type="text" id="txtName" name="txtName" value="<%=p.getSname()%>" required="">-->
+                            <select class="form-control" name="txtName">
+                            <option value="-1"><%=p.getSname()%></option>
+                            <%
+                                Connection con = null;
+                                try{
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory?useSSL=false", "root", "admin");
+                                    String query = "select * from segment where status='active'";
+                                    Statement stm= con.createStatement();                                 
+                                    ResultSet rs = stm.executeQuery(query);
+                                    
+                                    while(rs.next()){
+                                        %>
+                                        <option value="<%=rs.getString("segName")%>" required=""><%=rs.getString("segName")%></option>
+                                        <%
+                                    }
+                                }catch(Exception ex){
+                                    ex.printStackTrace();
+                                    out.println("Error" +ex.getMessage());
+                                }
+                            %>
+                            </select> 
+                        </div>
 
-            <!-- PURPOSE -->
-            <div class="input-group input-group-sm mb-3">
-                <div class="input-group-prepend">
-                    <span class="input-group-text" id="lblID">Purpose: </span>                           
-                </div>                       
-                <input type="text" id="txtPurpose" name="txtPurpose" value="<%=p.getPurpose()%>">                                         
-            </div>
+                        <!-- PURPOSE -->
+                        <div class="input-group input-group-sm mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="lblID">Purpose: </span>                           
+                            </div>                       
+                            <input type="text" id="txtPurpose" name="txtPurpose" value="<%=p.getPurpose()%>" required="">                                         
+                        </div>
 
-            <input type="submit"  name="hidUpdatePurpose" form="formPurpose" value="Update" class="btn btn-primary">
-            <!--            <input type="hidden" id="hidPurposeIDSave" name="hidUpdatePurpose" value="SubmitNewDetails">-->
-        </form>
+                        <input type="submit"  name="hidUpdatePurpose" form="formPurpose" value="Update" class="btn btn-primary" style="background-color:#000000; border: none;">
+                        <!--            <input type="hidden" id="hidPurposeIDSave" name="hidUpdatePurpose" value="SubmitNewDetails">-->
+                    </form>
+                </div>
+            </div>
+        </div>
     </body>
 </html>

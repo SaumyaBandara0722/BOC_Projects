@@ -24,15 +24,6 @@
         <servlet-name>UploadServlet</servlet-name>
         <servlet-class>com.UploadServlet</servlet-class>
     </servlet>
-    <servlet>
-        <servlet-name>SchemeSevlet1</servlet-name>
-        <servlet-class>com.SchemeSevlet1</servlet-class>
-        <multipart-config>
-            <max-file-size>10485760</max-file-size>
-            <max-request-size>20971520</max-request-size>
-            <file-size-threshold>5242880</file-size-threshold>
-        </multipart-config>
-    </servlet>
     <servlet-mapping>
         <servlet-name>AddCustomerServlet</servlet-name>
         <url-pattern>/AddCustomerServlet</url-pattern>
@@ -53,10 +44,6 @@
         <servlet-name>SchemeSevlet2</servlet-name>
         <url-pattern>/SchemeSevlet2</url-pattern>
     </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>UploadServlet</servlet-name>
-        <url-pattern>/UploadServlet</url-pattern>
-    </servlet-mapping>
     <context-param>
         <description>Location to store uploaded file</description>
         <param-name>file-upload</param-name>
@@ -65,8 +52,8 @@
         </param-value>
     </context-param>
     <servlet-mapping>
-        <servlet-name>SchemeSevlet1</servlet-name>
-        <url-pattern>/SchemeSevlet1</url-pattern>
+        <servlet-name>UploadServlet</servlet-name>
+        <url-pattern>/UploadServlet</url-pattern>
     </servlet-mapping>
     <session-config>
         <session-timeout>

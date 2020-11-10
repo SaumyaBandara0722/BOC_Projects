@@ -96,7 +96,8 @@ public class UpdateSegmentServlet extends HttpServlet {
             int output = DBHandler.deleteSegmentDetails(s);
             if (output > 0) {
                 out.print("Record deleted successfully!");
-                request.getRequestDispatcher("view_segment.jsp").include(request, response);
+//                request.getRequestDispatcher("view_segment.jsp").include(request, response); 
+                  request.getRequestDispatcher("view_segment.jsp");
             } else {
                 out.println("Sorry! unable to delete record");
             }

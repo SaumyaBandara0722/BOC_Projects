@@ -5,6 +5,7 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+<%@page import="java.sql.*;" %>
 <!DOCTYPE html>
 <html>
     <head>
@@ -15,125 +16,217 @@
         <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Loan Request</title>
+        
+        <script type = "text/javascript">
+            function validation(){
+                var nic = document.forms["formCustomer"]["txtNIC"].value;          
+                if (nic.length!==10){
+                    alert("NIC should have 10 characters");
+                    document.formCustomer.txtNIC.focus();
+                    return false;
+                }
+                             
+                var phone = document.forms["formCustomer"]["txtPhone"].value;               
+                if (phone.length!==10){
+                    alert("Invalid phone number");
+                    document.formCustomer.txtPhone.focus();
+                    return false;
+                }
+                               
+//                var amt = document.forms["formCustomer"].["txtAmt"].value;
+//                if (Number.isInteger(amt)){
+//                    return true;                    
+//                }
+//                else{
+//                    alert("Invalid price");
+//                    document.formCustomer.txtAmt.focus();
+//                    return false;  
+//                }             
+            }
+        </script>
     </head>
 
     <body>
-        <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #E8E8FA;">
-            <a class="navbar-brand" href="#">Loan Advisory</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
+        <nav class="navbar navbar-expand-lg navbar navbar-light" style="background-color: #FFE933;">
+        <img src="views/download.png" alt="" style="width:90px;height:70px;"/>
+        <a class="navbar-brand" href="#" style="white-space:pre">&#9Loan Advisory</a>     
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
-            <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <ul class="navbar-nav mr-auto">
-                    <li class="nav-item active">
-                        <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
-                    </li>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+                </li>
 
-                    <li class="nav-item active">
-                        <a class="nav-link" href="customer.jsp">Customer Request<span class="sr-only">(current)</span></a>
-                    </li>
+                <li class="nav-item active">
+                    <a class="nav-link" href="customer.jsp">Customer Request<span class="sr-only">(current)</span></a>
+                </li>
 
-                    <li class="dropdown">                   
-                        <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Segment and purpose<span class="caret"></span></a>
-                        <ul class="dropdown-menu">                        
-                            <li class="dropdown-item"><a href="purpose.jsp">Add Purpose</a></li>
-                            <li class="dropdown-item"><a href="segment.jsp">Add Segment</a></li>
-                            <li class="dropdown-item"><a href="view_purpose.jsp">View Purpose</a></li>
-                            <li class="dropdown-item"><a href="view_segment.jsp">View Segment</a></li>
-                        </ul>
-                    </li>
+                <li class="dropdown">                   
+                    <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Segment and purpose<span class="caret"></span></a>
+                    <ul class="dropdown-menu">                        
+                        <li class="dropdown-item"><a href="purpose.jsp">Add Purpose</a></li>
+                        <li class="dropdown-item"><a href="segment.jsp">Add Segment</a></li>
+                        <li class="dropdown-item"><a href="view_purpose.jsp">View Purpose</a></li>
+                        <li class="dropdown-item"><a href="view_segment.jsp">View Segment</a></li>
+                    </ul>
+                </li>
 
-                    <li class="dropdown">
-                        <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Loan Scheme<span class="caret"></span></a>
-                        <ul class="dropdown-menu">                        
-                            <li class="dropdown-item"><a href="selectScheme.jsp">Select</a></li>
-                            <li class="dropdown-item"><a href="schemeManagement.jsp">Add</a></li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
-        </nav>
+                <li class="dropdown">
+                    <a href="#" class="nav-link" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Loan Scheme<span class="caret"></span></a>
+                    <ul class="dropdown-menu">                        
+                        <li class="dropdown-item"><a href="selectScheme.jsp">Select</a></li>
+                        <li class="dropdown-item"><a href="schemeManagement.jsp">Add</a></li>                       
+                    </ul>
+                </li>
+            </ul>
+        </div>
+    </nav>
 
-        <div class="container">
-            <div class="row">
-                <div class="col-8">
-                    <h1 class="m-3">Customer Request Form</h1>
-                    <form id="formCustomer" action="AddCustomerServlet" method="post">                                      
-                        <!-- NIC -->
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="lblName">NIC: </span>                           
-                            </div>                       
-                            <input type="text" id="txtNIC" name="txtNIC">                       
-                            <input type="button" id="btnCheck" value="Check" class="btn btn-primary">                      
-                        </div>                 
+    <div class="container" style="width: 50%; align-items: center">
+        <div class="row">
+            <div class="col-8">
+                <h2 class="m-3">Customer Request Form</h2>
+                <form id="formCustomer" action="AddCustomerServlet" onsubmit="return validation()" method="post">                                      
+                    <!-- NIC -->
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="lblName">NIC: </span>                           
+                        </div>                       
+                        <input type="text" id="txtNIC" name="txtNIC" required>                       
+                        <input type="button" id="btnCheck" value="Check" class="btn btn-primary" style="background-color:#000000; border: none;">                      
+                    </div>                 
 
-                        <!-- NAME -->
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="lblName">Name: </span>
-                            </div>
-                            <input type="text" id="txtName" name="txtName">
+                    <!-- NAME -->
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="lblName">Name: </span>
                         </div>
+                        <input type="text" id="txtName" name="txtName" required>
+                    </div>
 
-                        <!-- PHONE NUMBER -->
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="lblName">Phone Number: </span>
-                            </div>
-                            <input type="text" id="txtPhone" name="txtPhone">
+                    <!-- PHONE NUMBER -->
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="lblName">Phone Number: </span>
                         </div>
+                        <input type="text" id="txtPhone" name="txtPhone" placeholder="eg : 0771234569" pattern="[0-9]{10}" required>
+                    </div>
 
-                        <!-- ACCOUNT NUMBER -->
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="lblName">Account Number: </span>
-                            </div>
-                            <input type="text" id="txtAccount" name="txtAccount">
-                        </div>                   
-
-                        <!-- SEGMENT -->
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="lblName">Segment: </span>
-                            </div>
-                            <input type="text" id="txtSegment" name="txtSegment">
+                    <!-- ACCOUNT NUMBER -->
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="lblName">Account Number: </span>
                         </div>
+                        <input type="text" id="txtAccount" name="txtAccount" required>
+                    </div>                   
 
-                        <!-- PURPOSE -->
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="lblName">Purpose: </span>
-                            </div>
-                            <input type="text" id="txtPurpose" name="txtPurpose">
+                    <!-- SEGMENT -->
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="lblName">Segment: </span>
                         </div>
-
-                        <!-- AMOUNT -->
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="lblName">Request Amount: </span>
-                            </div>
-                            <input type="text" id="txtAmt" name="txtAmt">
+                        <select class="form-control" name="txtSegment" id="txtSegment">
+                            <option value="-1">select segment</option>
+                            <%
+                                Connection con = null;
+                                try{
+                                    Class.forName("com.mysql.jdbc.Driver");
+                                    con = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory?useSSL=false", "root", "admin");
+                                    String query = "select * from segment where status='active'";
+                                    Statement stm= con.createStatement();                                 
+                                    ResultSet rs = stm.executeQuery(query);
+                                    
+                                    while(rs.next()){
+                                        %>
+                                        <option value="<%=rs.getString("segName")%>" required=""><%=rs.getString("segName")%></option>
+                                        <%
+                                    }
+                                }catch(Exception ex){
+                                    ex.printStackTrace();
+                                    out.println("Error" +ex.getMessage());
+                                }
+                            %>
+                        </select>
+                    </div>
+                   
+                    <!-- PURPOSE -->
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="lblName">Purpose: </span>
                         </div>
+                    <select class="form-control" name="txtPurpose">
+                        <option value="-1">select purpose</option>
+                        <%
+                            Connection conn = null;
+                            try{
+                                Class.forName("com.mysql.jdbc.Driver");
+                                conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory?useSSL=false", "root", "admin");
+                                String query = "select * from purpose where purpose_status='active'";
+                                Statement stm= con.createStatement(); 
+                                ResultSet rs = stm.executeQuery(query);
+                                    
+                                while(rs.next()){
+                                %>
+                                    <option value="<%=rs.getString("purpose")%>" required=""><%=rs.getString("purpose")%></option>
+                                <%
+                                }
+                            }catch(Exception ex){
+                                ex.printStackTrace();
+                                out.println("Error" +ex.getMessage());
+                            }
+                        %>
+                    </select>
+                    </div>
 
-                        <!-- SCHEME -->
-                        <div class="input-group input-group-sm mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="lblScheme">Loan Scheme: </span>
-                            </div>
-                            <input type="text" id="txtScheme" name="txtScheme">
+                    <!-- AMOUNT -->
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="lblName">Request Amount: </span>
                         </div>
+                        <input type="text" id="txtAmt" name="txtAmt" required>
+                    </div>
 
-                        <!--                    <div id="alertSuccess" class="alert alert-success"></div>
-                                            <div id="alertError" class="alert alert-danger"></div>-->
+                    <!-- SCHEME -->
+                    <div class="input-group input-group-sm mb-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="lblScheme">Loan Scheme: </span>
+                        </div>
+                        <select class="form-control" name="txtScheme">
+                        <option value="-1">select loan scheme</option>
+                        <%
+                            Connection connn = null;
+                            try{
+                                Class.forName("com.mysql.jdbc.Driver");
+                                connn = DriverManager.getConnection("jdbc:mysql://localhost:3306/loan_advisory?useSSL=false", "root", "admin");
+                                String query = "select * from scheme";
+                                Statement stm= connn.createStatement();                                 
+                                ResultSet rs = stm.executeQuery(query);
+                                    
+                                while(rs.next()){
+                                %>
+                                    <option value="<%=rs.getInt("id")%>" required=""><%=rs.getString("schemeName")%></option>
+                                <%
+                                }
+                            }catch(Exception ex){
+                                ex.printStackTrace();
+                                out.println("Error" +ex.getMessage());
+                            }
+                        %>
+                        </select>
+                    </div>
 
-                       <button type="submit" id="btnSave" form="formCustomer" value="Submit" class="btn btn-primary">Save</button>
+                    <!--<div id="alertSuccess" class="alert alert-success"></div>
+                    <div id="alertError" class="alert alert-danger"></div>-->
+
+                    <button type="submit" id="btnSave" value="Submit" class="btn btn-primary" style="background-color:#000000; border: none;">Save</button>
 <!--                        <input type="submit" name="btnSave"  value="Submit" class="btn btn-primary">-->
-                    </form>                
-                </div>
+                </form>                
             </div>
         </div>
+    </div>
     </body>
 </html>
 

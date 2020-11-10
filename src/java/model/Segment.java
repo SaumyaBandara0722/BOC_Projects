@@ -16,10 +16,11 @@ public class Segment {
     public Segment() {
     }
 
-    public Segment(int id, String segId, String segName) {
+    public Segment(int id, String segId, String segName, String status) {
         this.id = id;
         this.segId = segId;
-        this.segName = segName;       
+        this.segName = segName; 
+        this.status = status;
     }
     
 

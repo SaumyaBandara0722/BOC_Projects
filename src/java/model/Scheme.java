@@ -1,17 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package model;
 
-/**
- *
- * @author 977042160v
- */
+import java.sql.Blob;
+
 public class Scheme {
     private int sid;
     private String sname, desc, segment, purpose, path;
+    private Blob file;
 
     public int getSid() {
         return sid;
@@ -59,5 +53,14 @@ public class Scheme {
 
     public void setPath(String path) {
         this.path = path;
-    }    
+    }  
+
+    public Blob getFile() {
+        return file;
+    }
+
+    public void setFile(Blob file) {
+        this.file = file;
+    }
+    
 }
